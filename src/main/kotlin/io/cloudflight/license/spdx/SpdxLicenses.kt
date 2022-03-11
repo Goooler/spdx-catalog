@@ -1,7 +1,16 @@
 package io.cloudflight.license.spdx
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.util.*
 
+/**
+ * Singleton object which parses the SPDX catalog and provides all data in a structured way.
+ *
+ * @see [SpdxLicenses.getById]
+ * @see [SpdxLicenses.getByDescription]
+ *
+ * @author Klaus Lehner, Cloudflight
+ */
 object SpdxLicenses {
     private val objectMapper = ObjectMapper()
     private val licenseFile = objectMapper.readValue(
@@ -20,32 +29,42 @@ object SpdxLicenses {
         )
 
         licenseFile.licenses.forEach {
-            if (map.containsKey(it.name.toLowerCase())) {
+            if (map.containsKey(it.name.lowercase())) {
                 // unfortunately there are some really few entires in licenses.json with duplicate name
                 //throw IllegalArgumentException("Duplicate License name ${it.name}")
             } else {
-                map[it.name.toLowerCase()] = it
+                map[it.name.lowercase(Locale.getDefault())] = it
             }
         }
         licenseSynonyms.forEach { entry ->
             val license = licensesById[entry.key]
                 ?: throw IllegalArgumentException("Unknown license ${entry.key} in license-synoyms.json")
             entry.value.forEach { syn ->
-                if (map.containsKey(syn.toLowerCase())) {
+                if (map.containsKey(syn.lowercase())) {
                     //throw IllegalArgumentException("Duplicate License name ${syn}")
                 } else {
-                    map[syn.toLowerCase()] = license
+                    map[syn.lowercase()] = license
                 }
             }
         }
         licenseByDescription = map.toMap()
     }
 
+    /**
+     * Access a [SpdxLicense] by the given [licenseId]
+     *
+     * @return `null` if the license does not exist
+     */
     fun getById(licenseId: String): SpdxLicense? {
         return licensesById[licenseId]
     }
 
+    /**
+     * Access a [SpdxLicense] by the given [description]
+     *
+     * @return `null` if the license does not exist
+     */
     fun getByDescription(description: String): SpdxLicense? {
-        return licenseByDescription[description.toLowerCase()]
+        return licenseByDescription[description.lowercase()]
     }
 }
