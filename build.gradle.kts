@@ -94,6 +94,6 @@ signing {
     setRequired {
         System.getenv("PGP_SECRET") != null
     }
-    useInMemoryPgpKeys(System.getenv("PGP_SECRET"), System.getenv("PGP_PASSPHRASE "))
+    useInMemoryPgpKeys(System.getenv("PGP_SECRET"), System.getenv("PGP_PASSPHRASE"))
     sign(publishing.publications.getByName("maven"))
 }
