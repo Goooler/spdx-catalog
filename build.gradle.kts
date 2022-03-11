@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.6.10"
     `maven-publish`
+    `signing`
 }
 
 description = "The SPDX license catalog including a Kotlin Wrapper for access"
@@ -9,6 +10,11 @@ version = "3.16"
 
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.11.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.6.3")
 }
 
 java {
@@ -84,7 +90,7 @@ publishing {
     }
 }
 
-dependencies {
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.11.3")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.6.3")
+signing {
+    useInMemoryPgpKeys(System.getenv("PGP_SECRET"), System.getenv("PGP_PASSPHRASE "))
+    sign(publishing.publications.getByName("maven"))
 }
