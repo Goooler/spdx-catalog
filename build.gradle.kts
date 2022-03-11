@@ -1,7 +1,6 @@
 plugins {
     kotlin("jvm") version "1.6.10"
     `maven-publish`
-    `signing`
 }
 
 description = "The SPDX license catalog including a Kotlin Wrapper for access"
@@ -88,9 +87,4 @@ publishing {
             }
         }
     }
-}
-
-signing {
-    useInMemoryPgpKeys(System.getenv("PGP_SECRET"), System.getenv("PGP_PASSPHRASE "))
-    sign(publishing.publications.getByName("maven"))
 }
