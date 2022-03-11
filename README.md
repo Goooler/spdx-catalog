@@ -1,6 +1,6 @@
  # SPDX Catalog
 
-Bundles the latest version of the [SPDX Licence List](https://spdx.org/licenses/) in a JSON forma
+Bundles the latest version of the [SPDX Licence List](https://spdx.org/licenses/) in a JSON format
 as provided [here](https://github.com/spdx/license-list-data/tree/master/json).
 
 Additionaly, it comes with a small [Kotlin](https://kotlinlang.org/) library powered by Jackson ObjectMapper
