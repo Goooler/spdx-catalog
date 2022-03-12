@@ -1,5 +1,8 @@
  # SPDX Catalog
 
+[![Apache License, Version 2.0, January 2004](https://img.shields.io/github/license/apache/maven.svg?label=License)][license]
+[![Maven Central](https://img.shields.io/maven-central/v/io.cloudflight.license.spdx/spdx-catalog.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.cloudflight.license.spdx/spdx-catalog.svg)
+
 Bundles the latest version of the [SPDX Licence List](https://spdx.org/licenses/) in a JSON format
 as provided [here](https://github.com/spdx/license-list-data/tree/master/json).
 
@@ -32,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    implementation('io.cloudflight.license.spdx:spdx-catalog:3.16')
+    implementation('io.cloudflight.license.spdx:spdx-catalog:3.16.1')
 }
 ````
 
