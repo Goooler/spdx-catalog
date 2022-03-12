@@ -1,6 +1,6 @@
  # SPDX Catalog
 
-[![Apache License, Version 2.0, January 2004](https://img.shields.io/github/license/apache/maven.svg?label=License)][license]
+[![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Maven Central](https://img.shields.io/maven-central/v/io.cloudflight.license.spdx/spdx-catalog.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.cloudflight.license.spdx/spdx-catalog.svg)
 
 Bundles the latest version of the [SPDX Licence List](https://spdx.org/licenses/) in a JSON format
