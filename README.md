@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    implementation('io.cloudflight.license.spdx:spdx-catalog:3.16.1')
+    implementation('io.cloudflight.license.spdx:spdx-catalog:3.16.6')
 }
 ````
 
