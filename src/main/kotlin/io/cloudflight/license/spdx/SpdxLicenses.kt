@@ -114,6 +114,8 @@ object SpdxLicenses {
      * - then, if ID could not be found, we check [LicenseQuery.url]
      * - and last, we search for  [LicenseQuery.name]
      *
+     * This query can be seen as an `OR` query, and the first match wins.
+     *
      * @return `null` if no license could be found
      */
     fun findLicense(query: LicenseQuery): SpdxLicense? {
