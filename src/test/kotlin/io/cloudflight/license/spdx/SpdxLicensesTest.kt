@@ -67,4 +67,10 @@ class SpdxLicensesTest {
         assertNotNull(license)
         assertEquals("MIT", license?.licenseId)
     }
+
+    @Test
+    fun order() {
+        val license = SpdxLicenses.findByUrl("https://opensource.org/licenses/MPL-2.0")
+        assertEquals("MPL-2.0", license?.licenseId)
+    }
 }

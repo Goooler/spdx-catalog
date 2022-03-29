@@ -34,17 +34,13 @@ object SpdxLicenses {
         @SerialName("idToUrl") val idToUrl: Map<String, List<String>>
     )
 
-    private fun String.removeProtocol(): String {
-        return removePrefix("https://").removePrefix("http://")
-    }
-
     init {
         val mapByName = mutableMapOf<String, SpdxLicense>()
         val mapByUrl = mutableMapOf<String, SpdxLicense>()
 
         licenseFile.licenses.forEach {
-            if (!mapByName.containsKey(it.name.lowercase())) {
-                mapByName[it.name.lowercase(Locale.getDefault())] = it
+            if (!mapByName.containsKey(it.name.toLowerCase(Locale.getDefault()))) {
+                mapByName[it.name.toLowerCase(Locale.getDefault())] = it
             }
             addUrl(mapByUrl, it.detailsUrl, it)
             it.seeAlso.forEach { url ->
@@ -52,42 +48,41 @@ object SpdxLicenses {
             }
         }
         licenseSynonyms.idToName.forEach { entry ->
-            val license = licensesById[entry.key]
-                ?: throw IllegalArgumentException("Unknown license ${entry.key} in license-synonyms.json")
+            val license = getLicense(entry.key)
             entry.value.forEach { syn ->
-                if (!mapByName.containsKey(syn.lowercase())) {
-                    mapByName[syn.lowercase()] = license
+                if (!mapByName.containsKey(syn.toLowerCase(Locale.getDefault()))) {
+                    mapByName[syn.toLowerCase(Locale.getDefault())] = license
                 }
             }
         }
         licenseSynonyms.idToUrl.forEach { entry ->
-            val license = licensesById[entry.key]
-                ?: throw IllegalArgumentException("Unknown license ${entry.key} in license-synonyms.json")
-            entry.value.forEach { syn ->
-                if (mapByUrl.containsKey(syn.removeProtocol())) {
-                    throw IllegalArgumentException("Duplicate License URL ${syn}")
-                } else {
-                    mapByUrl[syn.removeProtocol()] = license
-                }
+            val license = getLicense(entry.key)
+            entry.value.forEach { synonymUrl ->
+                addUrl(mapByUrl, synonymUrl, license)
             }
         }
         licenseByName = mapByName.toMap()
         licenseByUrl = mapByUrl.toMap()
     }
 
-    private fun addUrl(
-        mapByUrl: MutableMap<String, SpdxLicense>,
-        url: String,
-        it: SpdxLicense
-    ) {
-        if (mapByUrl.containsKey(url.removeProtocol())) {
-            println(
-                "Duplicate License URL ${url.removeProtocol()} for ${it.licenseId} already exists for ${
-                    mapByUrl.getValue(url.removeProtocol()).licenseId
-                }"
-            )
+    private fun getLicense(licenseId: String): SpdxLicense {
+        return licensesById[licenseId]
+            ?: throw IllegalArgumentException("Unknown license $licenseId in license-synonyms.json")
+    }
+
+    private fun String.removeProtocol(): String {
+        return removePrefix("https://").removePrefix("http://")
+    }
+
+    private fun addUrl(mapByUrl: MutableMap<String, SpdxLicense>, url: String, license: SpdxLicense) {
+        val urlWithoutProtocol = url.removeProtocol()
+        val existingMappedLicense = mapByUrl[urlWithoutProtocol]
+        if (existingMappedLicense != null) {
+            if (existingMappedLicense.licenseId.length > license.licenseId.length) {
+                mapByUrl[urlWithoutProtocol] = license
+            }
         } else {
-            mapByUrl[url.removeProtocol()] = it
+            mapByUrl[urlWithoutProtocol] = license
         }
     }
 
@@ -106,7 +101,7 @@ object SpdxLicenses {
      * @return `null` if the license does not exist
      */
     fun findByName(name: String): SpdxLicense? {
-        return licenseByName[name.lowercase()]
+        return licenseByName[name.toLowerCase(Locale.getDefault())]
     }
 
     /**
@@ -129,9 +124,9 @@ object SpdxLicenses {
      * @return `null` if no license could be found
      */
     fun findLicense(query: LicenseQuery): SpdxLicense? {
-        query.id?.let { findById(it)?.let { l-> return l } }
-        query.url?.let { findByUrl(it)?.let { l-> return l } }
-        query.name?.let { findByName(it)?.let { l-> return l } }
+        query.id?.let { findById(it)?.let { l -> return l } }
+        query.url?.let { findByUrl(it)?.let { l -> return l } }
+        query.name?.let { findByName(it)?.let { l -> return l } }
         return null
     }
 }
