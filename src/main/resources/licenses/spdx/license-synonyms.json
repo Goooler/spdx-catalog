@@ -1,5 +1,5 @@
 {
-  "idToDescription": {
+  "idToName": {
     "0BSD": [
       "0BSD"
     ],
@@ -150,6 +150,38 @@
     "WTFPL": [
       "Do What The F*ck You Want To Public License",
       "WTFPL"
+    ]
+  },
+  "idToUrl": {
+    "Apache-2.0": [
+      "http://www.apache.org/licenses/LICENSE-2.0.txt",
+      "http://www.apache.org/licenses/LICENSE-2.0.html",
+      "http://www.opensource.org/licenses/apache2.0.php"
+    ],
+    "CC0-1.0": [
+      "http://creativecommons.org/publicdomain/zero/1.0/"
+    ],
+    "LGPL-2.1": [
+      "http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html",
+      "http://www.opensource.org/licenses/LGPL-2.1"
+    ],
+    "MIT": [
+      "https://opensource.org/licenses/mit-license",
+      "http://www.opensource.org/licenses/mit-license.php",
+      "http://opensource.org/licenses/MIT"
+    ],
+    "BSD-2-Clause": [
+      "http://www.opensource.org/licenses/bsd-license"
+    ],
+    "GPL-2.0-with-classpath-exception": [
+      "http://www.gnu.org/software/classpath/license.html"
+    ],
+    "EPL-1.0": [
+      "http://www.eclipse.org/org/documents/epl-v10.php"
+    ],
+    "EPL-2.0": [
+      "http://www.eclipse.org/legal/epl-2.0",
+      "https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt"
     ]
   }
 }
