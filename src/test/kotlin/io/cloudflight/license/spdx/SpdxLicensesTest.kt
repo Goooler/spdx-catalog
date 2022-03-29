@@ -62,6 +62,53 @@ class SpdxLicensesTest {
     }
 
     @Test
+    fun findByQuery_Multiple_Matches_WithoutName() {
+        val license = SpdxLicenses.findLicense(
+            LicenseQuery(
+                url = "http://scripts.sil.org/cms/scripts/page.php?item_id=OFL_web"
+            )
+        )
+        assertNotNull(license)
+        assertEquals("OFL-1.1", license?.licenseId)
+    }
+
+    @Test
+    fun findByQuery_Multiple_Matches_WithName() {
+        val license = SpdxLicenses.findLicense(
+            LicenseQuery(
+                name = "SIL Open Font License 1.1 with no Reserved Font Name",
+                url = "http://scripts.sil.org/cms/scripts/page.php?item_id=OFL_web"
+            )
+        )
+        assertNotNull(license)
+        assertEquals("OFL-1.1-no-RFN", license?.licenseId)
+    }
+
+    @Test
+    fun findByQuery_Multiple_Matches_WithUnknownName() {
+        val license = SpdxLicenses.findLicense(
+            LicenseQuery(
+                name = "SIL Open Font License 1.1 with no Reserved Font Name!",
+                url = "http://scripts.sil.org/cms/scripts/page.php?item_id=OFL_web"
+            )
+        )
+        assertNotNull(license)
+        assertEquals("OFL-1.1", license?.licenseId)
+    }
+
+    @Test
+    fun findByQuery_Multiple_Matches_WithName_UnknownUrl() {
+        val license = SpdxLicenses.findLicense(
+            LicenseQuery(
+                name = "SIL Open Font License 1.1 with no Reserved Font Name",
+                url = "http://scripts.sil.org/cms/scripts/page.php?item_id=OFL_web!!!"
+            )
+        )
+        assertNotNull(license)
+        assertEquals("OFL-1.1-no-RFN", license?.licenseId)
+    }
+
+    @Test
     fun checkMIT() {
         val license = SpdxLicenses.findByUrl("http://opensource.org/licenses/MIT")
         assertNotNull(license)

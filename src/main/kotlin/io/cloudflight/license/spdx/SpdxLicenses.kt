@@ -26,7 +26,7 @@ object SpdxLicenses {
 
     private val licensesById = licenseFile.licenses.associateBy { it.licenseId }
     private val licenseByName: Map<String, SpdxLicense>
-    private val licenseByUrl: Map<String, SpdxLicense>
+    private val licenseByUrl: Map<String, List<SpdxLicense>>
 
     @Serializable
     private class LicenseMappings(
@@ -43,7 +43,7 @@ object SpdxLicenses {
 
     init {
         val mapByName = mutableMapOf<String, SpdxLicense>()
-        val mapByUrl = mutableMapOf<String, SpdxLicense>()
+        val mapByUrl = mutableMapOf<String, MutableList<SpdxLicense>>()
 
         licenseFile.licenses.forEach {
             if (!mapByName.containsKey(it.name.toLowerCase(Locale.getDefault()))) {
@@ -81,16 +81,9 @@ object SpdxLicenses {
         return removePrefix("https://").removePrefix("http://")
     }
 
-    private fun addUrl(mapByUrl: MutableMap<String, SpdxLicense>, url: String, license: SpdxLicense) {
+    private fun addUrl(mapByUrl: MutableMap<String, MutableList<SpdxLicense>>, url: String, license: SpdxLicense) {
         val urlWithoutProtocol = url.removeProtocol()
-        val existingMappedLicense = mapByUrl[urlWithoutProtocol]
-        if (existingMappedLicense != null) {
-            if (existingMappedLicense.licenseId.length > license.licenseId.length) {
-                mapByUrl[urlWithoutProtocol] = license
-            }
-        } else {
-            mapByUrl[urlWithoutProtocol] = license
-        }
+        mapByUrl.getOrPut(urlWithoutProtocol) { mutableListOf() }.add(license)
     }
 
     /**
@@ -117,7 +110,7 @@ object SpdxLicenses {
      * @return `null` if the license does not exist
      */
     fun findByUrl(url: String): SpdxLicense? {
-        return licenseByUrl[url.removeProtocol()]
+        return licenseByUrl[url.removeProtocol()]?.minBy { it.licenseId.length }
     }
 
     /**
@@ -132,7 +125,20 @@ object SpdxLicenses {
      */
     fun findLicense(query: LicenseQuery): SpdxLicense? {
         query.id?.let { findById(it)?.let { l -> return l } }
-        query.url?.let { findByUrl(it)?.let { l -> return l } }
+        query.url?.let {
+            licenseByUrl[it.removeProtocol()]?.let { spdxLicenses ->
+                if (spdxLicenses.size == 1) {
+                    return spdxLicenses.first()
+                } else {
+                    spdxLicenses
+                        .filter { license -> query.name == null || query.name == license.name }
+                        .minBy { license -> license.licenseId.length }?.let { l -> return l }
+                    if (spdxLicenses.isNotEmpty()) {
+                        return spdxLicenses.first()
+                    }
+                }
+            }
+        }
         query.name?.let { findByName(it)?.let { l -> return l } }
         return null
     }
