@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.6.10"
-    kotlin("plugin.serialization") version "1.6.10"
+    kotlin("jvm") version "1.5.0"
+    kotlin("plugin.serialization") version "1.5.0"
     `maven-publish`
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
     signing
@@ -8,14 +8,14 @@ plugins {
 
 description = "The SPDX license catalog including a Kotlin Wrapper for access"
 group = "io.cloudflight.license.spdx"
-version = "3.16.3"
+version = "3.16.4"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.0")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 }
 
@@ -43,6 +43,13 @@ tasks.jar {
             "Implementation-Title" to project.name,
             "Implementation-Version" to project.version
         )
+    }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        apiVersion = "1.3"
+        languageVersion = "1.4"
     }
 }
 
