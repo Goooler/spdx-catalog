@@ -6,7 +6,7 @@
 Bundles the latest version of the [SPDX Licence List](https://spdx.org/licenses/) in a JSON format
 as provided [here](https://github.com/spdx/license-list-data/tree/master/json).
 
-Additionaly, it comes with a small [Kotlin](https://kotlinlang.org/) library powered by Jackson ObjectMapper
+Additionaly, it comes with a small [Kotlin](https://kotlinlang.org/) library powered by Kotlin Serialization
 which provides a convenient and typed access to that catalog.
 
 So for example, for the `Apache-2.0` license you have access to the following data:
