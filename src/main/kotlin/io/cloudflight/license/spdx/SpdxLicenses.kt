@@ -43,25 +43,19 @@ object SpdxLicenses {
         val mapByUrl = mutableMapOf<String, SpdxLicense>()
 
         licenseFile.licenses.forEach {
-            if (mapByName.containsKey(it.name.lowercase())) {
-                // unfortunately there are some really few entires in licenses.json with duplicate name
-                //throw IllegalArgumentException("Duplicate License name ${it.name}")
-            } else {
+            if (!mapByName.containsKey(it.name.lowercase())) {
                 mapByName[it.name.lowercase(Locale.getDefault())] = it
             }
-            if (mapByUrl.containsKey(it.detailsUrl.removeProtocol())) {
-                throw IllegalArgumentException("Duplicate License URL name ${it.name}")
-            } else {
-                mapByUrl[it.detailsUrl.removeProtocol()] = it
+            addUrl(mapByUrl, it.detailsUrl, it)
+            it.seeAlso.forEach { url ->
+                addUrl(mapByUrl, url, it)
             }
         }
         licenseSynonyms.idToName.forEach { entry ->
             val license = licensesById[entry.key]
                 ?: throw IllegalArgumentException("Unknown license ${entry.key} in license-synonyms.json")
             entry.value.forEach { syn ->
-                if (mapByName.containsKey(syn.lowercase())) {
-                    //throw IllegalArgumentException("Duplicate License name ${syn}")
-                } else {
+                if (!mapByName.containsKey(syn.lowercase())) {
                     mapByName[syn.lowercase()] = license
                 }
             }
@@ -71,7 +65,7 @@ object SpdxLicenses {
                 ?: throw IllegalArgumentException("Unknown license ${entry.key} in license-synonyms.json")
             entry.value.forEach { syn ->
                 if (mapByUrl.containsKey(syn.removeProtocol())) {
-                    throw IllegalArgumentException("Duplicate License name ${syn}")
+                    throw IllegalArgumentException("Duplicate License URL ${syn}")
                 } else {
                     mapByUrl[syn.removeProtocol()] = license
                 }
@@ -79,6 +73,22 @@ object SpdxLicenses {
         }
         licenseByName = mapByName.toMap()
         licenseByUrl = mapByUrl.toMap()
+    }
+
+    private fun addUrl(
+        mapByUrl: MutableMap<String, SpdxLicense>,
+        url: String,
+        it: SpdxLicense
+    ) {
+        if (mapByUrl.containsKey(url.removeProtocol())) {
+            println(
+                "Duplicate License URL ${url.removeProtocol()} for ${it.licenseId} already exists for ${
+                    mapByUrl.getValue(url.removeProtocol()).licenseId
+                }"
+            )
+        } else {
+            mapByUrl[url.removeProtocol()] = it
+        }
     }
 
     /**
@@ -119,24 +129,9 @@ object SpdxLicenses {
      * @return `null` if no license could be found
      */
     fun findLicense(query: LicenseQuery): SpdxLicense? {
-        if (query.id != null) {
-            val l = findById(query.id)
-            if (l != null) {
-                return l
-            }
-        }
-        if (query.url != null) {
-            val l = findByUrl(query.url)
-            if (l != null) {
-                return l
-            }
-        }
-        if (query.name != null) {
-            val l = findByName(query.name)
-            if (l != null) {
-                return l
-            }
-        }
+        query.id?.let { findById(it)?.let { l-> return l } }
+        query.url?.let { findByUrl(it)?.let { l-> return l } }
+        query.name?.let { findByName(it)?.let { l-> return l } }
         return null
     }
 }
