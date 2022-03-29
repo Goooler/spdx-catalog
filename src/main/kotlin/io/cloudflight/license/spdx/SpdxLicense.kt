@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  * @author Klaus Lehner, Cloudflight
  */
 @Serializable
-data class SpdxLicense(
+data class SpdxLicense internal constructor(
     /**
      * - Short identifier to be used to identify a license or exception match to licenses or exceptions in the context of an SPDX file, a source file, or elsewhere
      * - Short identifiers consist of ASCII letters (A-Za-z), digits (0-9), full stops (.) and hyphen or minus signs (-)
