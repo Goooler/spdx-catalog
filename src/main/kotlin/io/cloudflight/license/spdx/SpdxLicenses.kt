@@ -34,6 +34,13 @@ object SpdxLicenses {
         @SerialName("idToUrl") val idToUrl: Map<String, List<String>>
     )
 
+    @Serializable
+    private class SpdxLicenseFile constructor(
+        @SerialName("licenseListVersion") val licenseListVersion: String,
+        @SerialName("releaseDate") val releaseDate: String,
+        @SerialName("licenses") val licenses: List<SpdxLicense>
+    )
+
     init {
         val mapByName = mutableMapOf<String, SpdxLicense>()
         val mapByUrl = mutableMapOf<String, SpdxLicense>()
