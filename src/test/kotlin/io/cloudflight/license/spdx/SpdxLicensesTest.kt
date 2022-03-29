@@ -60,4 +60,11 @@ class SpdxLicensesTest {
         assertNotNull(license)
         assertEquals("Apache-2.0", license?.licenseId)
     }
+
+    @Test
+    fun checkMIT() {
+        val license = SpdxLicenses.findByUrl("http://opensource.org/licenses/MIT")
+        assertNotNull(license)
+        assertEquals("MIT", license?.licenseId)
+    }
 }

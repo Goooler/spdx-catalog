@@ -48,9 +48,9 @@ For example:
 ````kotlin
 import io.cloudflight.license.spdx.SpdxLicenses
 
-println(SpdxLicenses.getById("0BSD"))
+println(SpdxLicenses.findById("0BSD"))
 
-val license = SpdxLicenses.getByDescription("The Apache Software License, Version 2.0")
+val license = SpdxLicenses.findByDescription("The Apache Software License, Version 2.0")
 println(license?.licenseId)
 ````
 
@@ -61,7 +61,7 @@ and
 ````kotlin
 import io.cloudflight.license.spdx.SpdxLicenses
 
-val license = SpdxLicenses.getByDescription("The Apache Software License, Version 2.0")
+val license = SpdxLicenses.findByDescription("The Apache Software License, Version 2.0")
 println(license?.licenseId)
 ````
 
@@ -72,7 +72,7 @@ The library also normalizes different variants of license description names, the
 ````kotlin
 import io.cloudflight.license.spdx.SpdxLicenses
 
-val license = SpdxLicenses.getByDescription("Apache License v2.0")
+val license = SpdxLicenses.findByDescription("Apache License v2.0")
 println(license?.licenseId)
 ````
 
