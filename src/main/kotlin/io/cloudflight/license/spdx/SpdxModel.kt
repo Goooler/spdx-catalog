@@ -1,22 +1,24 @@
 package io.cloudflight.license.spdx
 
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-class SpdxLicenseFile @JsonCreator constructor(
-    @JsonProperty("licenseListVersion") val licenseListVersion: String,
-    @JsonProperty("releaseDate") val releaseDate: String,
-    @JsonProperty("licenses") val licenses: List<SpdxLicense>
+@Serializable
+internal class SpdxLicenseFile constructor(
+    @SerialName("licenseListVersion") val licenseListVersion: String,
+    @SerialName("releaseDate") val releaseDate: String,
+    @SerialName("licenses") val licenses: List<SpdxLicense>
 )
 
-class SpdxLicense @JsonCreator constructor(
-    @JsonProperty("reference") val reference: String,
-    @JsonProperty("isDeprecatedLicenseId") val isDeprecatedLicenseId: Boolean,
-    @JsonProperty("detailsUrl") val detailsUrl: String,
-    @JsonProperty("referenceNumber") val referenceNumber: String,
-    @JsonProperty("name") val name: String,
-    @JsonProperty("licenseId") val licenseId: String,
-    @JsonProperty("seeAlso") val seeAlso: List<String>,
-    @JsonProperty("isOsiApproved") val isOsiApproved: Boolean,
-    @JsonProperty("isFsfLibre") val isFsfLibre: Boolean?
+@Serializable
+data class SpdxLicense(
+    @SerialName("reference") val reference: String,
+    @SerialName("isDeprecatedLicenseId") val isDeprecatedLicenseId: Boolean,
+    @SerialName("detailsUrl") val detailsUrl: String,
+    @SerialName("referenceNumber") val referenceNumber: Int,
+    @SerialName("name") val name: String,
+    @SerialName("licenseId") val licenseId: String,
+    @SerialName("seeAlso") val seeAlso: List<String>,
+    @SerialName("isOsiApproved") val isOsiApproved: Boolean,
+    @SerialName("isFsfLibre") val isFsfLibre: Boolean? = null
 )

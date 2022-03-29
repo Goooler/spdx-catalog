@@ -1,6 +1,8 @@
 package io.cloudflight.license.spdx
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import java.util.*
 
 /**
@@ -12,21 +14,24 @@ import java.util.*
  * @author Klaus Lehner, Cloudflight
  */
 object SpdxLicenses {
-    private val objectMapper = ObjectMapper()
-    private val licenseFile = objectMapper.readValue(
-        // https://github.com/spdx/license-list-data/tree/master/json
-        SpdxLicenseFile::class.java.classLoader.getResourceAsStream("licenses/spdx/licenses.json"),
-        SpdxLicenseFile::class.java
-    )
+    private val licenseFile: SpdxLicenseFile = Json.decodeFromString(SpdxLicenseFile.serializer(),
+        SpdxLicenseFile::class.java.classLoader.getResourceAsStream("licenses/spdx/licenses.json")!!
+            .use { it.reader().readText() })
+
+    private val licenseSynonyms: LicenseMappings = Json.decodeFromString(LicenseMappings.serializer(),
+        LicenseMappings::class.java.classLoader.getResourceAsStream("licenses/spdx/license-synonyms.json")!!
+            .use { it.reader().readText() })
+
     private val licensesById = licenseFile.licenses.associateBy { it.licenseId }
     private val licenseByDescription: Map<String, SpdxLicense>
 
+    @Serializable
+    private class LicenseMappings(
+        @SerialName("idToDescription") val idToDescription: Map<String, List<String>>
+    )
+
     init {
         val map = mutableMapOf<String, SpdxLicense>()
-        val licenseSynonyms = objectMapper.readValue(
-            SpdxLicenseFile::class.java.classLoader.getResourceAsStream("licenses/spdx/license-synonyms.json"),
-            object : com.fasterxml.jackson.core.type.TypeReference<Map<String, List<String>>>() {}
-        )
 
         licenseFile.licenses.forEach {
             if (map.containsKey(it.name.lowercase())) {
@@ -36,7 +41,7 @@ object SpdxLicenses {
                 map[it.name.lowercase(Locale.getDefault())] = it
             }
         }
-        licenseSynonyms.forEach { entry ->
+        licenseSynonyms.idToDescription.forEach { entry ->
             val license = licensesById[entry.key]
                 ?: throw IllegalArgumentException("Unknown license ${entry.key} in license-synoyms.json")
             entry.value.forEach { syn ->

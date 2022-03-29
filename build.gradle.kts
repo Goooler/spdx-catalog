@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "1.6.10"
+    kotlin("plugin.serialization") version "1.6.10"
     `maven-publish`
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
     signing
@@ -7,14 +8,14 @@ plugins {
 
 description = "The SPDX license catalog including a Kotlin Wrapper for access"
 group = "io.cloudflight.license.spdx"
-version = "3.16.1"
+version = "3.16.2"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.11.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.0")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.6.3")
 }
 
