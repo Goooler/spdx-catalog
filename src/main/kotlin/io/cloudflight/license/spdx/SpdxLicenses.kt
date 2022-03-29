@@ -42,7 +42,7 @@ object SpdxLicenses {
             if (!mapByName.containsKey(it.name.toLowerCase(Locale.getDefault()))) {
                 mapByName[it.name.toLowerCase(Locale.getDefault())] = it
             }
-            addUrl(mapByUrl, it.detailsUrl, it)
+            addUrl(mapByUrl, it.reference, it)
             it.seeAlso.forEach { url ->
                 addUrl(mapByUrl, url, it)
             }

@@ -73,4 +73,10 @@ class SpdxLicensesTest {
         val license = SpdxLicenses.findByUrl("https://opensource.org/licenses/MPL-2.0")
         assertEquals("MPL-2.0", license?.licenseId)
     }
+
+    @Test
+    fun findByMainId() {
+        val license = SpdxLicenses.findByUrl("https://spdx.org/licenses/GD.html")
+        assertEquals("GD", license?.licenseId)
+    }
 }

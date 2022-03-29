@@ -8,7 +8,7 @@ plugins {
 
 description = "The SPDX license catalog including a Kotlin Wrapper for access"
 group = "io.cloudflight.license.spdx"
-version = "3.16.4"
+version = "3.16.5"
 
 repositories {
     mavenCentral()
