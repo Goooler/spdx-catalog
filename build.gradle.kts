@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.5.0"
+    id("io.cloudflight.autoconfigure-gradle") version "0.2.0"
     kotlin("plugin.serialization") version "1.5.0"
     `maven-publish`
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
@@ -9,6 +9,16 @@ plugins {
 description = "The SPDX license catalog including a Kotlin Wrapper for access"
 group = "io.cloudflight.license.spdx"
 version = "3.16.6"
+
+autoConfigure {
+    java {
+        languageVersion.set(JavaLanguageVersion.of(8))
+        vendorName.set("Cloudflight")
+    }
+    kotlin {
+        kotlinVersion.set("1.5.0")
+    }
+}
 
 repositories {
     mavenCentral()
@@ -21,36 +31,6 @@ dependencies {
 
 java {
     withJavadocJar()
-    withSourcesJar()
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
-
-tasks.jar {
-    manifest {
-        val configuration = project.configurations.getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME)
-        val classpath = configuration.files.joinToString(" ") { it.name }
-        val createdBy = "${System.getProperty("java.version")} (${System.getProperty("java.vendor")})"
-
-        attributes(
-            "Class-Path" to classpath,
-            "Created-By" to createdBy,
-            "Implementation-Vendor" to "Cloudflight",
-            "Implementation-Title" to project.name,
-            "Implementation-Version" to project.version
-        )
-    }
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions {
-        apiVersion = "1.3"
-        languageVersion = "1.4"
-    }
 }
 
 publishing {

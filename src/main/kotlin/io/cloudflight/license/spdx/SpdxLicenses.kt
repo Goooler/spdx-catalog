@@ -46,8 +46,8 @@ object SpdxLicenses {
         val mapByUrl = mutableMapOf<String, MutableList<SpdxLicense>>()
 
         licenseFile.licenses.forEach {
-            if (!mapByName.containsKey(it.name.toLowerCase(Locale.getDefault()))) {
-                mapByName[it.name.toLowerCase(Locale.getDefault())] = it
+            if (!mapByName.containsKey(it.name.lowercase(Locale.getDefault()))) {
+                mapByName[it.name.lowercase(Locale.getDefault())] = it
             }
             addUrl(mapByUrl, it.reference, it)
             it.seeAlso.forEach { url ->
@@ -57,8 +57,8 @@ object SpdxLicenses {
         licenseSynonyms.idToName.forEach { entry ->
             val license = getLicense(entry.key)
             entry.value.forEach { syn ->
-                if (!mapByName.containsKey(syn.toLowerCase(Locale.getDefault()))) {
-                    mapByName[syn.toLowerCase(Locale.getDefault())] = license
+                if (!mapByName.containsKey(syn.lowercase(Locale.getDefault()))) {
+                    mapByName[syn.lowercase(Locale.getDefault())] = license
                 }
             }
         }
@@ -101,7 +101,7 @@ object SpdxLicenses {
      * @return `null` if the license does not exist
      */
     fun findByName(name: String): SpdxLicense? {
-        return licenseByName[name.toLowerCase(Locale.getDefault())]
+        return licenseByName[name.lowercase(Locale.getDefault())]
     }
 
     /**
@@ -110,7 +110,7 @@ object SpdxLicenses {
      * @return `null` if the license does not exist
      */
     fun findByUrl(url: String): SpdxLicense? {
-        return licenseByUrl[url.removeProtocol()]?.minBy { it.licenseId.length }
+        return licenseByUrl[url.removeProtocol()]?.minByOrNull { it.licenseId.length }
     }
 
     /**
@@ -132,7 +132,7 @@ object SpdxLicenses {
                 } else {
                     spdxLicenses
                         .filter { license -> query.name == null || query.name == license.name }
-                        .minBy { license -> license.licenseId.length }?.let { l -> return l }
+                        .minByOrNull { license -> license.licenseId.length }?.let { l -> return l }
                     if (spdxLicenses.isNotEmpty()) {
                         return spdxLicenses.first()
                     }
