@@ -1,6 +1,6 @@
 plugins {
-    id("io.cloudflight.autoconfigure-gradle") version "0.2.0"
-    kotlin("plugin.serialization") version "1.5.0"
+    id("io.cloudflight.autoconfigure-gradle") version "1.0.1"
+    kotlin("plugin.serialization") version "1.9.0"
     `maven-publish`
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
     signing
@@ -8,7 +8,7 @@ plugins {
 
 description = "The SPDX license catalog including a Kotlin Wrapper for access"
 group = "io.cloudflight.license.spdx"
-version = "3.16.6"
+version = "3.21.0"
 
 autoConfigure {
     java {
@@ -16,7 +16,7 @@ autoConfigure {
         vendorName.set("Cloudflight")
     }
     kotlin {
-        kotlinVersion.set("1.5.0")
+        kotlinVersion.set("1.9.0")
     }
 }
 
