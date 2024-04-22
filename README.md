@@ -4,7 +4,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.cloudflight.license.spdx/spdx-catalog.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.cloudflight.license.spdx/spdx-catalog)
 
 Bundles the latest version of the [SPDX Licence List](https://spdx.org/licenses/) in a JSON format
-as provided [here](https://github.com/spdx/license-list-data/tree/master/json).
+as provided [here](https://github.com/spdx/license-list-data/tree/main/json).
 
 Additionaly, it comes with a small [Kotlin](https://kotlinlang.org/) library powered by Kotlin Serialization
 which provides a convenient and typed access to that catalog.
@@ -80,4 +80,4 @@ This will print `Apache-2.0` as well.
 
 ## How to contribute
 
-Always keep the version of that [SPDX list](https://github.com/spdx/license-list-data/tree/master/json) in sync with the version of this module.
+Always keep the version of that [SPDX list](https://github.com/spdx/license-list-data/tree/main/json) in sync with the version of this module.
